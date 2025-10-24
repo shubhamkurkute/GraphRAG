@@ -1,0 +1,11 @@
+langchain
+langchain-core
+langchain-community
+langchain-experimental
+langchain-neo4j
+langchain-ollama
+neo4j
+pandas
+numpy
+fastapi
+pymupdf
