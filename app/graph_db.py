@@ -3,6 +3,7 @@ from langchain_community.graphs import Neo4jGraph
 from langchain_ollama import OllamaEmbeddings
 from langchain_core.vectorstores import InMemoryVectorStore
 
+
 URI = "neo4j://127.0.0.1:7687"
 PASSWORD = "12345678"
 USERNAME = "neo4j"
@@ -30,7 +31,7 @@ def store_graph_documents(graph_documents):
     for graph_doc in graph_documents:
         # Add nodes
         for node in graph_doc.nodes:
-            node_type = node.type.replace(" ", "_")  # Sanitize for Neo4j
+            node_type = node.type.replace(" ", "_") 
             graph.query(
                 f"MERGE (n:{node_type} {{id: $id}})",
                 {"id": node.id}

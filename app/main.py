@@ -2,11 +2,9 @@ from langchain_ollama import ChatOllama
 from document_chunking import split_n_chunk
 from graph_db import create_graph, vector_store_db
 from rag_chain import create_rag_chain
-
+from langchain_groq import ChatGroq
 llm = ChatOllama(
-    model="llava:7b",
-    temperature=0.3,
-    num_predict=256
+    model="gemma3:12b", 
 )
 
 chunks = split_n_chunk()

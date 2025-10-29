@@ -1,11 +1,11 @@
 from langchain_graph_retriever import GraphRetriever
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 
 
 def create_rag_chain(vector_store, llm):
-    query = "Who is the founder and the name of company founded"
+    query = "What anomaly can be seen in the overall scenario"
     graph_retrieval = GraphRetriever(store=vector_store)
 
     def format_docs(docs):
