@@ -2,12 +2,14 @@ from langchain_graph_retriever import GraphRetriever
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+from langchain_neo4j import GraphCypherQAChain
 
-
-def create_rag_chain(vector_store, llm):
+def create_rag_chain(vector_store, llm, graph):
     query = "What anomaly can be seen in the overall scenario"
-    graph_retrieval = GraphRetriever(store=vector_store)
-
+    vector_docs = GraphRetriever(store=vector_store)
+    graph_traversal = GraphCypherQAChain(graph_store=graph)
+    graph_docs = graph_traversal.from_llm(llm=llm, cypher_prompt=query)
+    print(graph_docs)
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)
         
