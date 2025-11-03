@@ -16,9 +16,9 @@ graph = Neo4jGraph(
 
 
 def create_graph(documents, llm):
-    transformer = LLMGraphTransformer(llm=llm)
-    graph_documents = transformer.convert_to_graph_documents(documents=documents)
-    store_graph_documents(graph_documents=graph_documents)
+    # transformer = LLMGraphTransformer(llm=llm)
+    # graph_documents = transformer.convert_to_graph_documents(documents=documents)
+    # store_graph_documents(graph_documents=graph_documents)
     return graph
 
 

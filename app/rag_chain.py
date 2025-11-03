@@ -5,28 +5,36 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_neo4j import GraphCypherQAChain
 
 def create_rag_chain(vector_store, llm, graph):
-    query = "What anomaly can be seen in the overall scenario"
+
     vector_docs = GraphRetriever(store=vector_store)
-    graph_traversal = GraphCypherQAChain(graph_store=graph)
-    graph_docs = graph_traversal.from_llm(llm=llm, cypher_prompt=query)
-    print(graph_docs)
+    graph_traversal = GraphCypherQAChain.from_llm(llm=llm, graph=graph, allow_dangerous_requests=True)
+
     def format_docs(docs):
+        if not docs:
+            return "No context found."
         return "\n\n".join(doc.page_content for doc in docs)
-        
-        # Prompt template
+
+    # Prompt template
     prompt = ChatPromptTemplate.from_template("""
-    Answer the question based on the provided context.
-    
-    Context: {context}
-    Question: {question}
-    
-    Answer:
+    You are an expert AI assistant. Use both the vector-based and graph-based information to answer accurately.
+
+    --- Vector Context ---
+    {vector_context}
+
+    --- Graph Context ---
+    {graph_context}
+
+    --- Question ---
+    {question}
+
+    --- Answer ---
     """)
-    
+
     # Create chain
     chain = (
         {
-            "context": graph_retrieval | format_docs,
+            "vector_context": vector_docs | format_docs,
+            "graph_context": lambda x: graph_traversal.invoke(x),
             "question": RunnablePassthrough()
         }
         | prompt
@@ -34,7 +42,7 @@ def create_rag_chain(vector_store, llm, graph):
         | StrOutputParser()
     )
     
-    response = chain.invoke(query)
+    response = chain.invoke("Where is the wafer located?")
     return response
 
 
